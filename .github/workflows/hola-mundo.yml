@@ -1,0 +1,31 @@
+name: Hola mundo
+
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.404' 
+
+      - name: Restore dependencies
+        run: dotnet restore hello-word
+
+      - name: Set variable
+        run: echo "USERNAME"=${{github.actor}}>>$GITHUB_ENV
+        
+      - name: Build project
+        run: dotnet build hello-word --no-restore --configuration Release
+
+      - name: Run project
+        run: dotnet run --project hello-word
